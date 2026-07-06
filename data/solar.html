@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+
+		<title>Battery Monitor Solar</title>
+
+		<!-- Link to CSS -->
+		<link rel="stylesheet" href="/style.css">
+
+		<!-- Link to JavaScript -->
+		<script src="/solar.js"></script>
+	</head>
+
+	<body>
+		<div class="card">
+			<h1>Battery Monitor Solar</h1>
+			<button class="home" onclick="window.location='/'">Home</button>
+			<button class="settings_page" onclick="window.location='/settings'">Settings</button>
+			<button class="sundata_page" onclick="window.location='/sundata'">Sun Data</button>
+			<button class="status_page" onclick="window.location='/status'">Status</button>
+			<!--<button class="history_page" onclick="window.location='/history'">History</button>-->
+
+			<div class="solar-row">
+				<div class="sundata-card">
+					<div class="card-header">
+						Sun Data
+					</div>
+					<div class="card-subtitle" class="info">
+						<span id="sun-date">Loading...</span>
+					</div>
+					<div>🌅 Sunrise Time:
+						<span id="sunrise">--:--</span>
+					</div>
+					<div>🧭 Sunrise Azimuth:
+						<span id="sunrise_az">0</span>
+					</div>
+					<div>🌇 Sunset Time:
+						<span id="sunset">--:--</span>
+					</div>
+					<div>🧭 Sunset Azimuth:
+						<span id="sunset_az">0</span>
+					</div>
+					<div>⏱ Total Daylight:
+						<span id="daylight">--:--</span>
+					</div>
+					<div>☀️ Solar Noon Peak:
+						<span id="solar_noon_to_12_noon">--:--</span>
+					</div>
+					<div>📐 Solar Noon Altitude:
+						<span id="solar_noon_altitude">0</span>
+					</div>
+					<div>🌎 Sun Distance:
+						<span id="sun_distance">0</span>
+					</div>
+				</div>
+				
+				<div class="suntracker-card">
+					<div class="card-header">
+						Sun Tracker
+					</div>
+					<div>📐 Present Sun Altitude:
+						<span id="sun-altitude">--</span>°
+					</div>
+					<div>🧭 Present Sun Azimuth:
+						<span id="sun-azimuth">--</span>°
+					</div>
+				</div>
+				
+				<div class="panelData-card">
+					<div class="card-header">
+						Solar Panel Incidence
+					</div>
+					<div>☀️🔳 Panel Incidence:
+						<span id="panel-incidence">--</span>°
+					<div style="font-size:12px; margin-top:8px;">
+						<table style="width:100%;">
+							<tr>
+								<td>0-15°</td>
+								<td>Excellent</td>
+								<td>45-60°</td>
+								<td>Fair</td>
+							</tr>
+							<tr>
+								<td>15-30°</td>
+								<td>Very Good</td>
+								<td>60-75°</td>
+								<td>Poor</td>
+							</tr>
+							<tr>
+								<td>30-45°</td>
+								<td>Good</td>
+								<td>>75°</td>
+								<td>Very Poor</td>
+							</tr>
+						</table>
+					</div>
+						<hr>
+						<div>Power:
+							<span id="totalpower">0</span> W
+						</div>
+						<hr>
+						<div>Panel Azimuth: 
+							<span>
+								<input type="number" id="panelazimuth" min="0" max="360"> °
+								<button onclick="setPanelAzimuth()">Save Azimuth</button>
+							</span>
+						</div>
+						<div>Panel Tilt: 
+							<span>
+								<input type="number" id="paneltilt" min="0" max="90" value="45"> °
+								<button onclick="setPanelTilt()">Save Tilt</button>
+							</span>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</body>
+</html>

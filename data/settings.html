@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+
+		<title>Battery Monitor Settings</title>
+
+		<!-- Link to CSS -->
+		<link rel="stylesheet" href="/style.css">
+
+		<!-- Link to JavaScript -->
+		<script src="/settings.js"></script>
+	</head>
+
+	<body>
+		<div class="card">
+			<h1>Battery Monitor Settings</h1>
+			<button class="home" onclick="window.location='/'">Home</button>
+			<button class="solar_page" onclick="window.location='/solar'">Solar</button>
+			<button class="status_page" onclick="window.location='/status'">Status</button>
+			<!--<button class="history_page" onclick="window.location='/history'">History</button>-->
+
+			<div class="settings-row">
+				<div class="logging-card">
+					<h2>Logging</h2>
+					<button onclick="fetch('/startlogging')">Start Logging</button>
+					<button onclick="fetch('/stoplogging')">Stop Logging</button>
+					<button onclick="fetch('/clearlog')">Clear Log</button>
+
+					<div>Logging Interval: 
+						<span>
+							<input type="number" id="loginterval" min="1" max="3600" value="60">sec
+							<button onclick="setLogInterval()">Set Interval</button>
+						</span>
+					</div>
+					<div>Logging: 
+						<span id="loggingstatus">Unknown</span>
+						<span>  Log Size: <span id="logsize">0</span> bytes</span>
+					</div>
+					<button onclick="window.location='/download'">Download CSV</button>
+				</div>
+
+				<!--<div class="download-card">
+				</div>-->
+
+				<div class="wifi-card">
+					<h2>Network</h2>
+					<div>Status:
+						<span id="wifi-status">Disconnected</span>
+					</div>
+					<div>SSID:
+						<span id="ssid">Unknown</span>
+					</div>
+					<div>Signal:
+						<span id="rssi">0.0.0.0</span>
+					</div>
+					<div>IP:
+						<span id="ip">0.0.0.0</span>
+					</div>
+					<!-- <div>AP IP: -->
+						<!-- <span id="ap-ip">0.0.0.0</span> -->
+					<!-- </div> -->
+					<!-- <div>STA IP: -->
+						<!-- <span id="sta-ip">0.0.0.0</span> -->
+					<!-- </div> -->
+					<div>Public IP:
+						<span id="public_ip">0.0.0.0</span>
+					</div>
+					<div>Gateway:
+						<span id="gateway">0.0.0.0</span>
+					</div>
+					<button onclick="resetWifi()">Reset WiFi</button>
+				</div>
+
+				<div class="ota-card">
+					<h2>Firmware</h2>
+					<div>OTA Hostname:<span id="hostname">--</span></div>
+				</div>
+				
+				<div class="geotimedate-card">
+					<h2>Location</h2>
+					<div>Current:
+						<span id="current_location">Unknown</span>
+					</div>
+					<div>Geoname ID:
+						<span id="geoname_id">Unknown</span>
+					</div>
+					<div>Latitude:
+						<span id="current_lat">Unknown</span>
+					</div>
+					<div>Longitude:
+						<span id="current_long">Unknown</span>
+					</div>
+					
+					<button onclick="detectLocation()">
+						Detect Location From Public IP
+					</button>
+					<br><br>
+					<label>Select Location</label>
+					<br><br>
+					<select id="citySelect" onchange="selectCity()">
+						<option value="">No cities loaded</option>
+					</select>
+				</div>
+				
+			</div>
+		</div>
+	</body>
+</html>

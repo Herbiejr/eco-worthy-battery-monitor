@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+
+		<title>Battery Monitor Dashboard</title>
+
+		<!-- Link to CSS -->
+		<link rel="stylesheet" href="/style.css">
+
+		<!-- Link to JavaScript -->
+		<script src="/app.js"></script>
+	</head>
+
+	<body>
+		<div class="card">
+			<h1>Battery Monitor Dashboard</h1>
+			<button class="settings_page" onclick="window.location='/settings'">Settings</button>
+			<button class="solar_page" onclick="window.location='/solar'">Solar</button>
+			<button class="status_page" onclick="window.location='/status'">Status</button>
+			<!--<button class="history_page" onclick="window.location='/history'">History</button>-->
+
+			<!--<div class="led_status">LED Status:<b id="led">Unknown</b></div>-->
+			<!--<button class="button on" onclick="ledOn()">Turn ON</button>-->
+			<!--<button class="button off" onclick="ledOff()">Turn OFF</button>-->
+
+			<div class="info">Uptime: <span id="uptime">0</span></div>
+			<!--<div class="info">Connected Clients: <span id="clients">0</span></div>-->
+
+			<div class="battery-row">
+				<div class="battery-card">
+					<div class="card-header">Battery Bank</div>
+					<div class="big-value">
+						<span id="totalvolt">0</span>
+						<span class="unit">V</span>
+					</div>
+					<div>Current:
+						<span id="totalcurrent">0</span> A
+					</div>
+					<div>Power:
+						<span id="totalpower">0</span> W
+					</div>
+					<div>Temp:
+						<span id="totaltemp">0</span> °C
+					</div>
+					<hr>
+					<div class="gauge">
+						<div id="totalsocbar" class="gauge-fill"></div>
+						<div id="totalsoc" class="gauge-text">0%</div>
+					</div>
+					<div>Remaining Battery Capacity:
+						<span id="remainingah">0</span> Ah
+					</div>
+					<div>Total Battery Capacity:
+						<span id="capacityah">0</span> Ah
+					</div>
+					<!--<hr>
+					<div>Cell Delta B1:
+						<span id="celldelta1">0</span> V
+					</div>
+					<div>Cell Delta B2:
+						<span id="celldelta2">0</span> V
+					</div>-->
+				</div>
+
+				<div class="battery-card">
+					<div id="bat1dot" class="status-dot offline"></div>
+					<div id="bat1error" class="error-text"></div>
+					<div class="card-header">Battery 1</div>
+					<div class="big-value">
+						<span id="bat1volt">0</span>
+						<!--<span class="unit">V</span>-->
+					</div>
+					<div>Current:
+						<span id="bat1current">0</span>
+						<!--<span class="unit">A</span>-->
+					</div>
+					<div>Temp:
+						<span id="bat1temp">0</span>
+						<!--<span class="unit">°C</span>-->
+					</div>
+					<div><!--SOC:-->
+						<div class="gauge">
+							<div id="bat1socbar" class="gauge-fill"></div>
+							<div id="bat1soc" class="gauge-text">0%</div>
+						</div>
+					</div>
+
+					<button onclick="toggleBatteryCells('cells1panel', 1)">View Cells</button>
+					<div id="cells1panel" style="display:none; margin-top:10px;">
+						<table style="width:100%;">
+							<tr><td>Cell 1</td><td id="battery1_cell1">0.000 V</td></tr>
+							<tr><td>Cell 2</td><td id="battery1_cell2">0.000 V</td></tr>
+							<tr><td>Cell 3</td><td id="battery1_cell3">0.000 V</td></tr>
+							<tr><td>Cell 4</td><td id="battery1_cell4">0.000 V</td></tr>
+						</table>
+						<div>V-Diff <span id="battery1_cellDiff">0.000</span></div>
+					</div>
+
+					<div>Last Update: <span id="bat1age">0</span> sec ago </div>
+				</div>
+
+				<div class="battery-card">
+					<div id="bat2dot" class="status-dot offline"></div>
+					<div id="bat2error" class="error-text"></div>
+					<div class="card-header">Battery 2</div>
+					<div class="big-value">
+						<span id="bat2volt">0</span>
+						<!--<span class="unit">V</span>-->
+					</div>
+					<div>Current:
+						<span id="bat2current">0</span>
+						<!--<span class="unit">A</span>-->
+					</div>
+					<div>Temp:
+						<span id="bat2temp">0</span>
+						<!--<span class="unit">°C</span>-->
+					</div>
+					<div><!--SOC:-->
+						<div class="gauge">
+							<div id="bat2socbar" class="gauge-fill"></div>
+							<div id="bat2soc" class="gauge-text">0%</div>
+						</div>
+					</div>
+
+					<button onclick="toggleBatteryCells('cells2panel', 2)">View Cells</button>
+					<div id="cells2panel" style="display:none; margin-top:10px;">
+						<table style="width:100%;">
+							<tr><td>Cell 1</td><td id="battery2_cell1">0.000 V</td></tr>
+							<tr><td>Cell 2</td><td id="battery2_cell2">0.000 V</td></tr>
+							<tr><td>Cell 3</td><td id="battery2_cell3">0.000 V</td></tr>
+							<tr><td>Cell 4</td><td id="battery2_cell4">0.000 V</td></tr>
+						</table>
+						<div>V-Diff <span id="battery2_cellDiff">0.000</span></div>
+					</div>
+
+					<div>Last Update: <span id="bat2age">0</span> sec ago </div>
+				</div>
+			</div>
+		</div>
+	</body>
+</html>
