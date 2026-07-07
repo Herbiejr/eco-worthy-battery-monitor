@@ -20,14 +20,27 @@ const uint8_t batCellsQuery[] ={
 	0x77	// FRAME_END 0x77
 };
 
+// 
 // const uint8_t batHardwareQuery[] =
 // {
 // 	0xDD,	//FRAME_START 0xDD
 // 	0xA5,	// FRAME_READ 0xA5
-// 	0x05,	// CMD_READ_HARDWARE_VERSION 0x05
+// 	0x05,	// 05=BMS version
 // 	0x00,
 // 	0xFF,
 // 	0xFC,
+// 	0x77	// FRAME_END 0x77
+// };
+
+// MOS Control Command 
+// const uint8_t MOSControlQuery[] =
+// {
+// 	0xDD,	//FRAME_START 0xDD
+// 	0xA5,	// FRAME_READ 0xA5
+// 	0xE1,	// 05=BMS version
+// 	0x02,
+// 	0x00,	//XX,	// XX means the state of MOS control
+// 	0x??
 // 	0x77	// FRAME_END 0x77
 // };
 
@@ -323,9 +336,9 @@ void parsePacket(uint8_t* pData, size_t length, BatteryData& bat){
 		// 		Serial.printf("%02X ", pData[i]);
 		// Serial.println();
 
-		uint16_t startByte = pData[0];	// << 8) | pData[0];	// Start byte
-		uint16_t command = pData[1];	// << 8) | pData[1];	// basic info response
-		uint16_t payloadLength = (pData[2] << 8) | pData[3];	// Payload length
+		//uint16_t startByte = pData[0];	// << 8) | pData[0];	// Start byte
+		//uint16_t command = pData[1];	// << 8) | pData[1];	// basic info response
+		//uint16_t payloadLength = (pData[2] << 8) | pData[3];	// Payload length
 
 		uint16_t rawVoltage = (pData[4] << 8) | pData[5];	// Battery voltage
 		int16_t rawCurrent = (pData[6] << 8) | pData[7];	// Battery current
@@ -333,11 +346,11 @@ void parsePacket(uint8_t* pData, size_t length, BatteryData& bat){
 		uint16_t ahMax = (pData[10] << 8) | pData[11];	// Full capacity
 		uint16_t cycleCount = (pData[12] << 8) | pData[13];	// Cycle Count
 
-		uint16_t unknownConstant0 = (pData[14] << 8) | pData[15];	// Unknown constant - BMS Type ID ? - fixed identifier or firmware/version related constant.
-		uint16_t reservedFlags = (pData[16] << 8) | pData[21];	// Reserved Flags
-		uint16_t unknownConstant1 = (pData[22] << 8) | pData[23];	// Unknown constant - configuration or calibration constant - sometimes related to balance voltage threshold or internal resistance scaling
+		uint16_t unknownConstant0 = (pData[14] << 8) | pData[15];	// Product Date - Two bytes are used for transmission such as 0x2068, where the date is the lowest 5: 0x2028 & 0x1f = 8 for date; the month (0x2068 > > > 5) & 0x0f = 0x03 for March; the year 2000 + 0x2068 > 9 = 2000 + 0x10 = 2016; 
+		uint16_t reservedFlags = (pData[16] << 8) | pData[21];	// Reserved Flags or Balance Status - Each bit represents each cell block’s balance, 0 is off, 1 is on ; 1~16pcs in series. 
+		uint16_t unknownConstant1 = (pData[22] << 8) | pData[23];	// Unknown constant / Balance Status_High- Each bit represents each cell block’s balance, 0 is off, 1 is on ; 17~32pcs in series, 32pcs at the most. Increased base on V0 
 
-		uint16_t switches = pData[24];	// << 8) | pData[24];	// 8 Switches
+		uint16_t switches = pData[24];	// << 8) | pData[24];	// Protection Status - 8 Switches - ：Each bit represents a protective state, 0 is unprotected, and 1 is protected
 		uint16_t cellCount = pData[25];	// << 8) | pData[25];	// Cell Count
 		uint16_t tempSenCount = pData[26];	//	<< 8) | pData[26];	// Temp Sensor count
 		uint16_t rawTemp = (pData[27] << 8) | pData[28];	// Temperature
@@ -349,8 +362,8 @@ void parsePacket(uint8_t* pData, size_t length, BatteryData& bat){
 
 		uint16_t reserved1 = (pData[36] << 8) | pData[37];	// Reserved
 
-		uint16_t checksum = (pData[38] << 8) | pData[39];	// Checksum
-		uint16_t endByte = pData[40];	// << 8) | pData[40];	// End byte
+		//uint16_t checksum = (pData[38] << 8) | pData[39];	// Checksum
+		//uint16_t endByte = pData[40];	// << 8) | pData[40];	// End byte
 
 		bat.voltage = rawVoltage / 100.0f;
 		bat.current = rawCurrent / 100.0f;
@@ -403,17 +416,17 @@ void parsePacket(uint8_t* pData, size_t length, BatteryData& bat){
 		// 		Serial.printf("%02X ", pData[i]);
 		// Serial.println();
 
-		uint16_t c_startByte = pData[0];	// << 8) | pData[0];	// Start byte
-		uint16_t c_command = pData[1];	// << 8) | pData[1];	// basic info response
-		uint16_t c_payloadLength = (pData[2] << 8) | pData[3];	// Payload length
+		//uint16_t c_startByte = pData[0];	// << 8) | pData[0];	// Start byte
+		//uint16_t c_command = pData[1];	// << 8) | pData[1];	// basic info response
+		//uint16_t c_payloadLength = (pData[2] << 8) | pData[3];	// Payload length
 
 		uint16_t c_rawVoltage1 = (pData[4] << 8) | pData[5];	// Cell 1 voltage
 		uint16_t c_rawVoltage2 = (pData[6] << 8) | pData[7];	// Cell 2 voltage
 		uint16_t c_rawVoltage3 = (pData[8] << 8) | pData[9];	// Cell 3 voltage
 		uint16_t c_rawVoltage4 = (pData[10] << 8) | pData[11];	// Cell 4 voltage
 
-		uint16_t c_checksum = (pData[12] << 8) | pData[13];	// Checksum
-		uint16_t c_endByte = pData[14];	// << 8) | pData[40];	// End byte
+		//uint16_t c_checksum = (pData[12] << 8) | pData[13];	// Checksum
+		//uint16_t c_endByte = pData[14];	// << 8) | pData[40];	// End byte
 
 		bat.cell[0] = c_rawVoltage1 / 1000.0f;
 		bat.cell[1] = c_rawVoltage2 / 1000.0f;
@@ -427,7 +440,7 @@ void parsePacket(uint8_t* pData, size_t length, BatteryData& bat){
 		bat.cellDiff = differential / 1000.000f;
 
 		return;
-	}else{	// if (pData[1] == 0x05){	// Cells Packet data
+	}else{	// if (pData[1] == 0x05){	// hardware version no.
 
 		Serial.printf("Second Packet %s", pData[1]);
 		Serial.printf("Cells packet %u bytes\n", length);
