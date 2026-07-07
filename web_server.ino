@@ -351,8 +351,14 @@ void setup(){
 	Serial.println("HTTP Server Started");
 	delay(1000);  // Give WiFi and BLE stack time to settle
 
-	NimBLEDevice::init("");
+	NimBLEDevice::init("ESP32_BMS_Manager");
 	NimBLEDevice::setPower(ESP_PWR_LVL_P9);  // Optional: reduce power issues
+	//NimBLEScan* pBLEScan = NimBLEDevice::getScan();
+	// CRITICAL: 25% Duty Cycle scan window leaves 75% of radio time open for Wi-Fi
+    //NimBLEDevice->setInterval(200); 
+    //NimBLEDevice->setWindow(50);    
+    //NimBLEDevice->setActiveScan(false);
+
 
 	// Serial.println("Connecting to Battery 1...");
 	// connectBattery1();
@@ -376,44 +382,49 @@ void loop(){
 
 	if (wifiConnected && sunDataNeedsUpdate && millis() - wifiConnectedAt > 5000) {
 		Serial.println("Sundata Needs Update");
-    sunDataNeedsUpdate = false;
+    	sunDataNeedsUpdate = false;
 		Serial.println("Disabled Bluetooth");
 		NimBLEDevice::deinit(true);
 		delay(300);
 		getCurrentISO8601();
 
-    if(location.autoLocation){
+	    if(location.autoLocation){
+			bool success = true;
 			if (!getLocationFromIP()) {
 				Serial.println("Location lookup failed");
-				Serial.println("Location lookup Re-enabling Bluetooth");
-				NimBLEDevice::init("");
-				NimBLEDevice::setPower(ESP_PWR_LVL_P9);  // Optional: reduce power issues
-				return;
+				success = false;
 			}
-			if (!lookupNearestCities()) {
+			if (success && !lookupNearestCities()) {
 				Serial.println("Nearest Cities lookup failed");
-				Serial.println("Nearest Cities lookup Re-enabling Bluetooth");
-				NimBLEDevice::init("");
-				NimBLEDevice::setPower(ESP_PWR_LVL_P9);  // Optional: reduce power issues
-				return;
+				success = false;
 			}
-			// if geoname changed
-			String payload = downloadMonthlyData();
-			if (payload.length() == 0) {
-				Serial.println("Sun data download failed");
-				Serial.println("Sun data Re-enabling Bluetooth");
-				NimBLEDevice::init("");
-				NimBLEDevice::setPower(ESP_PWR_LVL_P9);  // Optional: reduce power issues
-				return;
+			if (success) {
+				// if geoname changed
+				String payload = downloadMonthlyData();
+				if (payload.length() == 0) {
+					Serial.println("Sun data download failed");
+					success = false;
+				}
 			}
-			saveSunData(payload);
-			if (loadJson()) {
+			if (success) {
+				saveSunData(payload);
+				if (!loadJson()) {
+					Serial.println("loadJson() failed");
+	            	success = false;
+				}
+			}
+			if(success){
 				updateTodaySunInfo();
-				Serial.println("loadJSON Re-enabling Bluetooth");
-				NimBLEDevice::init("");
-				NimBLEDevice::setPower(ESP_PWR_LVL_P9);  // Optional: reduce power issues
 			}
-    }
+			
+			Serial.println("Re-enabling Bluetooth");
+			NimBLEDevice::init("");
+			NimBLEDevice::setPower(ESP_PWR_LVL_P9);  // Optional: reduce power issues
+	
+			if(!success){
+				return;
+			}
+		}
 	}
 
 	if(millis() - lastBLERead > 2000){
