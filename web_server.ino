@@ -350,7 +350,9 @@ void setup(){
 	server.begin();
 	Serial.println("HTTP Server Started");
 	delay(1000);  // Give WiFi and BLE stack time to settle
-
+	
+	esp_coex_preference_set(ESP_COEX_PREFER_BALANCE);
+	
 	//NimBLEDevice::init("ESP32_BMS_Manager");
 	//NimBLEDevice::setPower(ESP_PWR_LVL_P9);  // Optional: reduce power issues
 	//NimBLEScan* pBLEScan = NimBLEDevice::getScan();
