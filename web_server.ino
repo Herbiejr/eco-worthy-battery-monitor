@@ -351,8 +351,8 @@ void setup(){
 	Serial.println("HTTP Server Started");
 	delay(1000);  // Give WiFi and BLE stack time to settle
 
-	NimBLEDevice::init("ESP32_BMS_Manager");
-	NimBLEDevice::setPower(ESP_PWR_LVL_P9);  // Optional: reduce power issues
+	//NimBLEDevice::init("ESP32_BMS_Manager");
+	//NimBLEDevice::setPower(ESP_PWR_LVL_P9);  // Optional: reduce power issues
 	//NimBLEScan* pBLEScan = NimBLEDevice::getScan();
 	// CRITICAL: 25% Duty Cycle scan window leaves 75% of radio time open for Wi-Fi
     //NimBLEDevice->setInterval(200); 
